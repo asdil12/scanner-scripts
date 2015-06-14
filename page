@@ -1,0 +1,21 @@
+#!/bin/bash
+
+source /etc/scanbd/scripts/functions
+
+create_lock
+
+
+res=$1 # res = 300 or 600
+
+if [[ -f /var/cache/scans/001.tiff ]] ; then
+	last=`ls /var/cache/scans/*.tiff | sort | tail -1 | cut -d '.' -f 1`
+	let last+=1
+	next=`printf "%03d.tiff" $last`
+else
+	next="001.tiff"
+fi
+
+scanimage --format tiff --mode Color \
+    -l 2 -t 0 -x 206 -y 293 --resolution $res --contrast 18 --brightness 4 --swdespeck=yes --despeck 3 > /var/cache/scans/$next
+
+remove_lock

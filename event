@@ -1,0 +1,26 @@
+#!/bin/bash
+
+logger -t "scanbd: $0" "Begin of $SCANBD_ACTION for device $SCANBD_DEVICE"
+
+case $SCANBD_ACTION in
+	file)
+		/etc/scanbd/scripts/page 600
+		if ! [[ -f /var/cache/scans/NO_AUTOSEND ]] ; then
+			/etc/scanbd/scripts/send
+		fi
+	;;
+	scan)
+		/etc/scanbd/scripts/page 300
+		if ! [[ -f /var/cache/scans/NO_AUTOSEND ]] ; then
+			/etc/scanbd/scripts/send
+		fi
+	;;
+	copy)
+		/etc/scanbd/scripts/copy
+	;;
+	email)
+		/etc/scanbd/scripts/send
+	;;
+esac
+
+logger -t "scanbd: $0" "End   of $SCANBD_ACTION for device $SCANBD_DEVICE"

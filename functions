@@ -1,0 +1,30 @@
+#!/bin/bash
+
+lockfile=/var/lock/scan.lock
+
+function create_lock() {
+	if [[ -f $lockfile ]] ; then
+		pid=`cat $lockfile`
+		if [[ "$pid" != "" && -d "/proc/$pid" ]] ; then
+			echo "Failed to claim log - another process is running"
+			exit 1
+		else
+			rm $lockfile
+		fi
+	fi
+	echo $$ > $lockfile
+}
+
+function remove_lock() {
+	rm -f $lockfile
+}
+
+function wait_lock() {
+	while true ; do
+		if [[ -f $lockfile ]] ; then
+			sleep 1
+		else
+			return 0
+		fi
+	done
+}

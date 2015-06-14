@@ -1,0 +1,30 @@
+#!/bin/bash
+
+source /etc/scanbd/scripts/functions
+
+wait_lock
+create_lock
+
+cd /var/cache/scans
+
+if ls *.tiff >/dev/null 2>&1 ; then
+	# normal sending	
+
+	for f in *.tiff ; do
+		o=`echo "$f" | cut -d '.' -f 1`
+		echo "Converting: ${o}.tiff -> ${o}.pdf"
+		tiff2pdf -p A4 -j -q 70 -o ${o}.pdf ${o}.tiff
+	done
+
+	out="/var/ftp/Scans/`date +%Y-%m-%d_%H:%M:%S_scan.pdf`"
+
+	echo "Merging and saving to $out"
+	pdfunite *.pdf $out
+
+	rm -vf *.pdf *.tiff NO_AUTOSEND
+else
+	# go into multipage mode: disable autosend
+	touch NO_AUTOSEND
+fi
+
+remove_lock
