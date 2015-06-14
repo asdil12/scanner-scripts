@@ -4,11 +4,12 @@ source /etc/scanbd/scripts/functions
 
 create_lock
 
-
 res=$1 # res = 300 or 600
 
-if [[ -f /var/cache/scans/001.tiff ]] ; then
-	last=`ls /var/cache/scans/*.tiff | sort | tail -1 | cut -d '.' -f 1`
+cd /var/cache/scans
+
+if [[ -f 001.tiff ]] ; then
+	last=`ls *.tiff | sort | tail -1 | cut -d '.' -f 1`
 	let last+=1
 	next=`printf "%03d.tiff" $last`
 else
