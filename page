@@ -17,6 +17,6 @@ else
 fi
 
 scanimage --format tiff --mode Color \
-    -l 2 -t 0 -x 206 -y 293 --resolution $res --contrast 18 --brightness 4 --swdespeck=yes --despeck 3 > /var/cache/scans/$next
+    -l 2 -t 0 -x 206 --resolution $res --contrast 18 --brightness 4 --swdespeck=yes --despeck 3 > /var/cache/scans/$next
 
 remove_lock
